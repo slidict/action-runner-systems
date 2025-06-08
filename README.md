@@ -50,3 +50,14 @@ helm upgrade arc-runner-set \
   -n arc-runners \
   -f values.yaml
 ```
+
+### How to update the GitHub PAT used by the ARC runners
+
+1. Create a new Personal Access Token (PAT) with `repo` and `workflow` scopes on GitHub.
+2. Update the Kubernetes Secret:
+
+```bash
+kubectl create secret generic arc-runner-set-<LISTENER_SUFFIX>-listener \
+  --namespace arc-systems \
+  --from-literal=github_token=<NEW_PAT> \
+  --dry-run=client -o yaml | kubectl apply -f -
